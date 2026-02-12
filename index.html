@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Candy Clicker 🍭</title>
+<style>
+body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #ffb6e6, #ffd6f6);
+    text-align: center;
+    color: #5a005a;
+}
+
+h1 {
+    font-size: 3em;
+    margin-top: 20px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.panel {
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    width: 250px;
+}
+
+button {
+    background: #ff66c4;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 15px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 5px 0;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #ff33aa;
+    transform: scale(1.05);
+}
+
+.bigCandy {
+    font-size: 100px;
+    cursor: pointer;
+    transition: 0.1s;
+}
+
+.bigCandy:active {
+    transform: scale(0.9);
+}
+
+.stat {
+    font-weight: bold;
+}
+</style>
+</head>
+<body>
+
+<h1>🍭 Candy Clicker 🍬</h1>
+
+<div class="bigCandy" onclick="clickCandy()">🍬</div>
+
+<p>Candy: <span class="stat" id="candy">0</span></p>
+<p>Rebirth Tokens: <span class="stat" id="rebirths">0</span></p>
+
+<div class="container">
+
+<div class="panel">
+<h2>🍬 Upgrades</h2>
+<p>Multiplier: x<span id="multiplier">1</span></p>
+<button onclick="buyMultiplier()">Buy Multiplier (Cost: <span id="multiCost">10</span>)</button>
+</div>
+
+<div class="panel">
+<h2>🔁 Rebirth</h2>
+<p>Requires: 1000 Candy</p>
+<button onclick="rebirth()">Rebirth</button>
+</div>
+
+<div class="panel">
+<h2>🌟 Rebirth Shop</h2>
+<p>Auto Clicker: <span id="autoLevel">0</span></p>
+<button onclick="buyAuto()">Buy Auto Clicker (Cost: 1 Token)</button>
+
+<p>Super Multiplier Boost</p>
+<button onclick="buySuperMulti()">Buy Boost (Cost: 3 Tokens)</button>
+</div>
+
+</div>
+
+<script>
+let game = {
+    candy: 0,
+    multiplier: 1,
+    multiCost: 10,
+    rebirthTokens: 0,
+    autoClicker: 0,
+    superBoost: 1
+};
+
+function clickCandy() {
+    game.candy += game.multiplier * game.superBoost;
+    updateUI();
+}
+
+function buyMultiplier() {
+    if (game.candy >= game.multiCost) {
+        game.candy -= game.multiCost;
+        game.multiplier++;
+        game.multiCost = Math.floor(game.multiCost * 1.5);
+        updateUI();
+    }
+}
+
+function rebirth() {
+    if (game.candy >= 1000) {
+        game.rebirthTokens++;
+        game.candy = 0;
+        game.multiplier = 1;
+        game.multiCost = 10;
+        updateUI();
+    }
+}
+
+function buyAuto() {
+    if (game.rebirthTokens >= 1) {
+        game.rebirthTokens--;
+        game.autoClicker++;
+        updateUI();
+    }
+}
+
+function buySuperMulti() {
+    if (game.rebirthTokens >= 3) {
+        game.rebirthTokens -= 3;
+        game.superBoost++;
+        updateUI();
+    }
+}
+
+function autoClick() {
+    if (game.autoClicker > 0) {
+        game.candy += game.autoClicker * game.superBoost;
+        updateUI();
+    }
+}
+
+setInterval(autoClick, 1000);
+
+function updateUI() {
+    document.getElementById("candy").innerText = Math.floor(game.candy);
+    document.getElementById("multiplier").innerText = game.multiplier;
+    document.getElementById("multiCost").innerText = game.multiCost;
+    document.getElementById("rebirths").innerText = game.rebirthTokens;
+    document.getElementById("autoLevel").innerText = game.autoClicker;
+    saveGame();
+}
+
+function saveGame() {
+    localStorage.setItem("candyClickerSave", JSON.stringify(game));
+}
+
+function loadGame() {
+    let saved = localStorage.getItem("candyClickerSave");
+    if (saved) {
+        game = JSON.parse(saved);
+    }
+    updateUI();
+}
+
+loadGame();
+</script>
+
+</body>
+</html>
