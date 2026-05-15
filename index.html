@@ -1,185 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Candy Clicker 🍭</title>
-<style>
-body {
-    margin: 0;
-    font-family: "Poppins", sans-serif;
-    background: linear-gradient(135deg, #ffb6e6, #ffd6f6);
-    text-align: center;
-    color: #5a005a;
-}
-
-h1 {
-    font-size: 3em;
-    margin-top: 20px;
-}
-
-.container {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    margin-top: 20px;
-}
-
-.panel {
-    background: white;
-    padding: 20px;
-    border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    width: 250px;
-}
-
-button {
-    background: #ff66c4;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 15px;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    margin: 5px 0;
-    transition: 0.2s;
-}
-
-button:hover {
-    background: #ff33aa;
-    transform: scale(1.05);
-}
-
-.bigCandy {
-    font-size: 100px;
-    cursor: pointer;
-    transition: 0.1s;
-}
-
-.bigCandy:active {
-    transform: scale(0.9);
-}
-
-.stat {
-    font-weight: bold;
-}
-</style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The Golden Guild</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
 </head>
 <body>
+<nav>
+  <div class="nav-logo">THE GOLDEN GUILD</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="show('about', this)">About Us</button>
+    <button class="nav-tab" onclick="show('posts', this)">Posts</button>
+    <button class="nav-tab" onclick="show('shops', this)">Shops</button>
+  </div>
+</nav>
 
-<h1>🍭 Candy Clicker 🍬</h1>
+<!-- ABOUT -->
+<section id="about" class="section visible">
+  <div class="about-wrap">
+    <img class="about-banner" src="https://tenor.com/de/view/caster-gilgamesh-fate-grand-order-fgo-pointing-gif-16330585"/>
+    <div class="about-card">
+      <h2>About The Golden Guild</h2>
+      <p>
+        Welcome to The Golden Guild — a premium Roblox community built for structured progression,
+        teamwork, and high-level gameplay. We focus on organization, activity, and long-term growth
+        for serious players.
+        Join us today and appply to our Sailor Piece Guild at --> https://discord.gg/hNaFrxxQBK
+      </p>
+    </div>
+  </div>
+</section>
 
-<div class="bigCandy" onclick="clickCandy()">🍬</div>
+<!-- POSTS -->
+<section id="posts" class="section">
+  <div class="about-wrap">
+    <h2 class="section-title">Guild Posts</h2>
+    <div id="postsContainer"></div>
+  </div>
+</section>
 
-<p>Candy: <span class="stat" id="candy">0</span></p>
-<p>Rebirth Tokens: <span class="stat" id="rebirths">0</span></p>
+<!-- SHOPS -->
+<section id="shops" class="section">
+  <div class="about-wrap">
+    <h2 class="section-title">Guild Shops</h2>
+    <div id="shopsContainer" class="shops-grid"></div>
+  </div>
+</section>
 
-<div class="container">
-
-<div class="panel">
-<h2>🍬 Upgrades</h2>
-<p>Multiplier: x<span id="multiplier">1</span></p>
-<button onclick="buyMultiplier()">Buy Multiplier (Cost: <span id="multiCost">10</span>)</button>
-</div>
-
-<div class="panel">
-<h2>🔁 Rebirth</h2>
-<p>Requires: 1000 Candy</p>
-<button onclick="rebirth()">Rebirth</button>
-</div>
-
-<div class="panel">
-<h2>🌟 Rebirth Shop</h2>
-<p>Auto Clicker: <span id="autoLevel">0</span></p>
-<button onclick="buyAuto()">Buy Auto Clicker (Cost: 1 Token)</button>
-
-<p>Super Multiplier Boost</p>
-<button onclick="buySuperMulti()">Buy Boost (Cost: 3 Tokens)</button>
-</div>
-
-</div>
-
-<script>
-let game = {
-    candy: 0,
-    multiplier: 1,
-    multiCost: 10,
-    rebirthTokens: 0,
-    autoClicker: 0,
-    superBoost: 1
-};
-
-function clickCandy() {
-    game.candy += game.multiplier * game.superBoost;
-    updateUI();
-}
-
-function buyMultiplier() {
-    if (game.candy >= game.multiCost) {
-        game.candy -= game.multiCost;
-        game.multiplier++;
-        game.multiCost = Math.floor(game.multiCost * 1.5);
-        updateUI();
-    }
-}
-
-function rebirth() {
-    if (game.candy >= 1000) {
-        game.rebirthTokens++;
-        game.candy = 0;
-        game.multiplier = 1;
-        game.multiCost = 10;
-        updateUI();
-    }
-}
-
-function buyAuto() {
-    if (game.rebirthTokens >= 1) {
-        game.rebirthTokens--;
-        game.autoClicker++;
-        updateUI();
-    }
-}
-
-function buySuperMulti() {
-    if (game.rebirthTokens >= 3) {
-        game.rebirthTokens -= 3;
-        game.superBoost++;
-        updateUI();
-    }
-}
-
-function autoClick() {
-    if (game.autoClicker > 0) {
-        game.candy += game.autoClicker * game.superBoost;
-        updateUI();
-    }
-}
-
-setInterval(autoClick, 1000);
-
-function updateUI() {
-    document.getElementById("candy").innerText = Math.floor(game.candy);
-    document.getElementById("multiplier").innerText = game.multiplier;
-    document.getElementById("multiCost").innerText = game.multiCost;
-    document.getElementById("rebirths").innerText = game.rebirthTokens;
-    document.getElementById("autoLevel").innerText = game.autoClicker;
-    saveGame();
-}
-
-function saveGame() {
-    localStorage.setItem("candyClickerSave", JSON.stringify(game));
-}
-
-function loadGame() {
-    let saved = localStorage.getItem("candyClickerSave");
-    if (saved) {
-        game = JSON.parse(saved);
-    }
-    updateUI();
-}
-
-loadGame();
-</script>
-
+<footer>
+  THE GOLDEN GUILD • Premium Community Hub
+</footer>
+<script src="script.js"></script>
 </body>
 </html>
